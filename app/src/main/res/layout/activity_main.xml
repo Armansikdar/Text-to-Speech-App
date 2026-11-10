@@ -19,7 +19,7 @@
             android:orientation="vertical"
             android:paddingHorizontal="16dp"
             android:paddingTop="16dp"
-            android:paddingBottom="32dp">
+            android:paddingBottom="110dp">
 
             <!-- App Header & Status -->
             <LinearLayout
@@ -86,7 +86,7 @@
                         android:layout_marginStart="4dp"
                         android:text="@string/status_ready"
                         android:textColor="@color/on_success_container"
-                        android:textSize="11sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -156,7 +156,7 @@
                         android:minHeight="44dp"
                         android:text="@string/btn_install_voice"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         app:cornerRadius="10dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -231,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:text="Quick Test:"
                             android:textColor="@color/text_secondary"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
@@ -244,7 +244,7 @@
                             android:paddingHorizontal="10dp"
                             android:text="@string/btn_sample_bn"
                             android:textColor="@color/primary"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             app:backgroundTint="@color/primary_container"
                             app:cornerRadius="12dp" />
 
@@ -258,7 +258,7 @@
                             android:paddingHorizontal="10dp"
                             android:text="@string/btn_sample_en"
                             android:textColor="@color/secondary"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             app:backgroundTint="@color/secondary_container"
                             app:cornerRadius="12dp" />
                     </LinearLayout>
@@ -307,7 +307,7 @@
                             android:paddingHorizontal="8dp"
                             android:text="@string/btn_paste"
                             android:textColor="@color/primary"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             app:icon="@drawable/ic_content_paste"
                             app:iconSize="16dp"
                             app:iconTint="@color/primary" />
@@ -322,7 +322,7 @@
                             android:paddingHorizontal="8dp"
                             android:text="@string/btn_clear"
                             android:textColor="@color/error"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             app:icon="@drawable/ic_clear"
                             app:iconSize="16dp"
                             app:iconTint="@color/error" />
@@ -367,7 +367,7 @@
                         android:layout_marginTop="6dp"
                         android:text="0 characters • 0 words"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -421,7 +421,7 @@
                             android:paddingHorizontal="6dp"
                             android:text="@string/btn_reset_controls"
                             android:textColor="@color/primary"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             app:icon="@drawable/ic_refresh"
                             app:iconSize="16dp"
                             app:iconTint="@color/primary" />
@@ -521,50 +521,55 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Action Buttons: Speak & Stop -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <!-- Speak Primary Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSpeak"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/primary"
-                    android:text="@string/btn_speak"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="16dp"
-                    app:icon="@drawable/ic_volume_up"
-                    app:iconGravity="textStart"
-                    app:iconSize="24dp"
-                    app:iconTint="@color/white" />
-
-                <!-- Stop Secondary Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnStop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="12dp"
-                    android:backgroundTint="@color/error"
-                    android:paddingHorizontal="20dp"
-                    android:text="@string/btn_stop"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="16dp"
-                    app:icon="@drawable/ic_stop"
-                    app:iconGravity="textStart"
-                    app:iconSize="20dp"
-                    app:iconTint="@color/white" />
-            </LinearLayout>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+        <!-- Fixed bottom bar: Speak & Stop -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/surface"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <!-- Speak Primary Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSpeak"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/primary"
+                android:text="@string/btn_speak"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_volume_up"
+                app:iconGravity="textStart"
+                app:iconSize="24dp"
+                app:iconTint="@color/white" />
+
+            <!-- Stop Secondary Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStop"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="12dp"
+                android:backgroundTint="@color/error"
+                android:paddingHorizontal="20dp"
+                android:text="@string/btn_stop"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_stop"
+                app:iconGravity="textStart"
+                app:iconSize="20dp"
+                app:iconTint="@color/white" />
+        </LinearLayout>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
