@@ -25,26 +25,21 @@ jobs:
     - name: Create Dummy google-services.json with correct package name
       run: |
         if [ ! -f "app/google-services.json" ]; then
-          echo '{"project_info":{"project_number":"000000000000","project_id":"dummy-project","storage_bucket":"dummy.appspot.com"},"client":[{"client_info":{"mobilesdk_app_id":"1:000000000000:android:0000000000000000","android_client_info":{"package_name":"com.aistudio.photovault.kxqzvp"}},"oauth_client":[],"api_key":[{"current_key":"dummy_api_key"}],"services":{"analytics_service":{"status":1}}}]}' > app/google-services.json
+          echo '{"project_info":{"project_number":"000000000000","project_id":"dummy-project","storage_bucket":"dummy.appspot.com"},"client":[{"client_info":{"mobilesdk_app_id":"1:000000000000:android:0000000000000000","android_client_info":{"package_name":"com.armansikdar.tts"}},"oauth_client":[],"api_key":[{"current_key":"dummy_api_key"}],"services":{"analytics_service":{"status":1}}}]}' > app/google-services.json
         fi
 
-    - name: Restore signing key from GitHub Secret
-      env:
-        DEBUG_KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+    - name: Create debug signing key
       run: |
-        if [ -z "$DEBUG_KEYSTORE_B64" ]; then
-          echo "The secret DEBUG_KEYSTORE_B64 is missing. Add it in Settings > Secrets and variables > Actions."
-          exit 1
-        fi
-        echo "$DEBUG_KEYSTORE_B64" | base64 -d > debug.keystore
-        mkdir -p ~/.android
-        cp debug.keystore ~/.android/debug.keystore
+        keytool -genkeypair -v -keystore debug.keystore \
+          -storepass android -keypass android -alias androiddebugkey \
+          -keyalg RSA -keysize 2048 -validity 10000 \
+          -dname "CN=Android Debug,O=Android,C=US"
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Build Release APK
-      run: gradle assembleRelease -x test -x lint -Djava.awt.headless=true
+    - name: Build Debug APK
+      run: gradle assembleDebug -x test -x lint -Djava.awt.headless=true
 
     - name: Publish APK to a private release (does not use artifact storage)
       env:
@@ -52,4 +47,4 @@ jobs:
         GH_REPO: ${{ github.repository }}
       run: |
         gh release delete latest-apk --yes --cleanup-tag || true
-        gh release create latest-apk app/build/outputs/apk/release/*.apk --title "Latest APK" --notes "Newest release build" --prerelease
+        gh release create latest-apk app/build/outputs/apk/debug/*.apk --title "Latest APK" --notes "Newest release build" --prerelease
