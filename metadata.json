@@ -1,0 +1,6 @@
+{
+  "name": "Text to Speech",
+  "description": "Offline native Text-to-Speech (TTS) app with language selection including Bengali and English, customizable speech rate and pitch, and quick sample phrases.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

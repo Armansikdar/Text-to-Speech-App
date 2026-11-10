@@ -1,0 +1,11 @@
+workflows:
+  android-release:
+    name: Build Android APK
+    instance_type: mac_mini_m1
+    scripts:
+      - name: Set executable permissions
+        script: chmod +x gradlew
+      - name: Build Android APK
+        script: ./gradlew assembleRelease
+    artifacts:
+      - app/build/outputs/apk/release/*.apk
