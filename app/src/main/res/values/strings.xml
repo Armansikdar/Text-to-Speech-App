@@ -3,14 +3,14 @@
     <string name="app_subtitle">Offline Native Speech Synthesizer</string>
     
     <!-- Input Section -->
-    <string name="hint_input_text">Type or paste text here (English, বাংলা, etc.)…</string>
+    <string name="hint_input_text">Type or paste text here…</string>
     <string name="label_enter_text">Input Text</string>
     <string name="char_count_format">%1$d characters • %2$d words</string>
     <string name="btn_speak">Speak</string>
     <string name="btn_stop">Stop</string>
     <string name="btn_clear">Clear</string>
     <string name="btn_paste">Paste</string>
-    <string name="btn_sample_bn">বাংলা নমুনা (Bengali)</string>
+    <string name="btn_sample_bn">Bengali Sample</string>
     <string name="btn_sample_en">English Sample</string>
 
     <!-- Configuration Controls -->
