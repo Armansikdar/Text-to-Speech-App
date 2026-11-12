@@ -1,578 +1,581 @@
-package com.example
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true">
 
-import android.content.ClipDescription
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.os.Bundle
-import android.provider.Settings
-import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.SeekBar
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.databinding.ActivityMainBinding
-import java.util.Locale
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-/**
- * Data model for a supported TTS language.
- */
-data class TtsLanguage(
-    val displayName: String,
-    val locale: Locale,
-    val sampleText: String
-) {
-    override fun toString(): String = displayName
-}
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="110dp">
 
-class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+            <!-- App Header & Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-    private lateinit var binding: ActivityMainBinding
-    private var textToSpeech: TextToSpeech? = null
-    private var isTtsReady: Boolean = false
-    private var isCurrentlySpeaking: Boolean = false
+                <ImageView
+                    android:id="@+id/ivAppIcon"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/tts_app_icon_1794282254631" />
 
-    private val utteranceId = "VoiceCraft_Utterance_ID"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-    // Supported languages list, prioritizing Bengali and English as requested
-    private val languagesList: List<TtsLanguage> by lazy {
-        listOf(
-            TtsLanguage(
-                displayName = "বাংলা (বাংলাদেশ) - Bengali (BD)",
-                locale = Locale("bn", "BD"),
-                sampleText = getString(R.string.bengali_sample_text)
-            ),
-            TtsLanguage(
-                displayName = "বাংলা (ভারত) - Bengali (IN)",
-                locale = Locale("bn", "IN"),
-                sampleText = "নমস্কার! কেমন আছেন? এটি একটি নেটিভ অ্যান্ড্রয়েড অফলাইন বাংলা টেক্সট টু স্পিচ পরীক্ষা।"
-            ),
-            TtsLanguage(
-                displayName = "English (United States)",
-                locale = Locale.US,
-                sampleText = getString(R.string.english_sample_text)
-            ),
-            TtsLanguage(
-                displayName = "English (United Kingdom)",
-                locale = Locale.UK,
-                sampleText = "Good day! Welcome to offline native Text-to-Speech synthesis on Android."
-            ),
-            TtsLanguage(
-                displayName = "English (India)",
-                locale = Locale("en", "IN"),
-                sampleText = "Hello and welcome! This offline speech synthesizer is working seamlessly."
-            ),
-            TtsLanguage(
-                displayName = "हिन्दी (भारत) - Hindi (IN)",
-                locale = Locale("hi", "IN"),
-                sampleText = "नमस्ते! आप कैसे हैं? यह एंड्रॉइड का नेटिव ऑफलाइन टेक्स्ट टू स्पीच इंजन है।"
-            ),
-            TtsLanguage(
-                displayName = "Español (España) - Spanish",
-                locale = Locale("es", "ES"),
-                sampleText = "¡Hola! Bienvenido a la síntesis de texto a voz sin conexión en Android."
-            ),
-            TtsLanguage(
-                displayName = "Français (France) - French",
-                locale = Locale.FRANCE,
-                sampleText = "Bonjour! Bienvenue dans l'application de synthèse vocale hors ligne."
-            ),
-            TtsLanguage(
-                displayName = "Deutsch (Deutschland) - German",
-                locale = Locale.GERMANY,
-                sampleText = "Guten Tag! Willkommen bei der nativen Text-to-Speech-Sprachsynthese."
-            ),
-            TtsLanguage(
-                displayName = "日本語 (日本) - Japanese",
-                locale = Locale.JAPAN,
-                sampleText = "こんにちは！オフラインの音声読み上げアプリへようこそ。"
-            ),
-            TtsLanguage(
-                displayName = "العربية - Arabic",
-                locale = Locale("ar"),
-                sampleText = "مرحباً بكم في تطبيق تحويل النص إلى كلام باللغة العربية على أندرويد."
-            )
-        )
-    }
+                    <TextView
+                        android:id="@+id/tvAppTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
 
-    private var selectedLanguageIndex: Int = 0
+                    <TextView
+                        android:id="@+id/tvAppSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_subtitle"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+                <!-- Status Badge -->
+                <LinearLayout
+                    android:id="@+id/layoutStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_status_badge"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="6dp">
 
-        setupWindowInsets()
-        setupTextCounters()
-        setupLanguageSpinner()
-        setupSliders()
-        setupButtons()
+                    <ImageView
+                        android:id="@+id/ivStatusDot"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_check_circle"
+                        app:tint="@color/on_success_container" />
 
-        // Initialize Android's native offline TextToSpeech engine
-        updateStatus(
-            statusText = getString(R.string.status_initializing),
-            isSuccess = false,
-            isWarning = false
-        )
-        textToSpeech = TextToSpeech(this, this)
-    }
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/status_ready"
+                        android:textColor="@color/on_success_container"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
 
-    /**
-     * Window insets handling for modern edge-to-edge layout.
-     */
-    private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorLayout) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
-            insets
-        }
-    }
+            <!-- Speaking Indeterminate Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progressBarSpeaking"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="12dp"
+                android:indeterminate="true"
+                android:visibility="invisible" />
 
-    /**
-     * Initializes TextToSpeech engine callback.
-     */
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            isTtsReady = true
+            <!-- Warning Card for Missing TTS Voice Data -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/warning_container"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#6B5518"
+                app:strokeWidth="1dp"
+                tools:visibility="visible">
 
-            // Set utterance progress listener for real-time speech tracking
-            textToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                override fun onStart(utteranceId: String?) {
-                    runOnUiThread {
-                        isCurrentlySpeaking = true
-                        updateSpeakingUiState(true)
-                    }
-                }
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                override fun onDone(utteranceId: String?) {
-                    runOnUiThread {
-                        isCurrentlySpeaking = false
-                        updateSpeakingUiState(false)
-                        updateStatus(
-                            statusText = getString(R.string.status_stopped),
-                            isSuccess = true,
-                            isWarning = false
-                        )
-                    }
-                }
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                @Deprecated("Deprecated in Java")
-                override fun onError(utteranceId: String?) {
-                    runOnUiThread {
-                        isCurrentlySpeaking = false
-                        updateSpeakingUiState(false)
-                        updateStatus(
-                            statusText = "Playback error occurred",
-                            isSuccess = false,
-                            isWarning = true
-                        )
-                    }
-                }
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_warning"
+                            app:tint="@color/on_warning_container" />
 
-                override fun onError(utteranceId: String?, errorCode: Int) {
-                    runOnUiThread {
-                        isCurrentlySpeaking = false
-                        updateSpeakingUiState(false)
-                        updateStatus(
-                            statusText = "Speech error (Code: $errorCode)",
-                            isSuccess = false,
-                            isWarning = true
-                        )
-                    }
-                }
-            })
+                        <TextView
+                            android:id="@+id/tvWarningText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:text="@string/status_missing_data"
+                            android:textColor="@color/on_warning_container"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-            // Apply selected language and slider configs
-            applySelectedLanguage()
-            applySpeechRate()
-            applyPitch()
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnInstallVoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/on_warning_container"
+                        android:minHeight="44dp"
+                        android:text="@string/btn_install_voice"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        } else {
-            isTtsReady = false
-            updateStatus(
-                statusText = getString(R.string.msg_tts_error),
-                isSuccess = false,
-                isWarning = true
-            )
-            binding.cardWarning.visibility = View.VISIBLE
-            binding.tvWarningText.text = getString(R.string.msg_tts_error)
-            binding.btnInstallVoice.setOnClickListener { openTtsSettings() }
-            Toast.makeText(this, R.string.msg_tts_error, Toast.LENGTH_LONG).show()
-        }
-    }
+            <!-- Card 1: Language Selection & Quick Samples -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp">
 
-    /**
-     * Sets up the language selector dropdown Spinner.
-     */
-    private fun setupLanguageSpinner() {
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            languagesList
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        binding.spinnerLanguage.adapter = adapter
-        binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedLanguageIndex = position
-                if (isTtsReady) {
-                    applySelectedLanguage()
-                }
-            }
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_language"
+                            app:tint="@color/primary" />
 
-    /**
-     * Applies the selected language and verifies whether language voice data exists.
-     */
-    private fun applySelectedLanguage() {
-        val tts = textToSpeech ?: return
-        val currentLang = languagesList[selectedLanguageIndex]
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/label_language"
+                            android:textColor="@color/text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-        val result = tts.setLanguage(currentLang.locale)
+                    <!-- Language Spinner Container -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_spinner_border"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="4dp">
 
-        when (result) {
-            TextToSpeech.LANG_MISSING_DATA -> {
-                binding.cardWarning.visibility = View.VISIBLE
-                binding.tvWarningText.text = "${currentLang.displayName}: Voice data missing. Tap below to install."
-                binding.btnInstallVoice.setOnClickListener { openTtsInstallOrSettings() }
-                updateStatus(
-                    statusText = "Missing Voice Data",
-                    isSuccess = false,
-                    isWarning = true
-                )
-            }
-            TextToSpeech.LANG_NOT_SUPPORTED -> {
-                binding.cardWarning.visibility = View.VISIBLE
-                binding.tvWarningText.text = "${currentLang.displayName} is not supported by device TTS engine."
-                binding.btnInstallVoice.setOnClickListener { openTtsSettings() }
-                updateStatus(
-                    statusText = "Language Unsupported",
-                    isSuccess = false,
-                    isWarning = true
-                )
-            }
-            else -> {
-                // Supported and ready
-                binding.cardWarning.visibility = View.GONE
-                updateStatus(
-                    statusText = getString(R.string.status_ready),
-                    isSuccess = true,
-                    isWarning = false
-                )
-            }
-        }
-    }
+                        <Spinner
+                            android:id="@+id/spinnerLanguage"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:minHeight="48dp"
+                            android:spinnerMode="dropdown" />
+                    </LinearLayout>
 
-    /**
-     * Sets up Speed (Rate) and Pitch SeekBars.
-     */
-    private fun setupSliders() {
-        // Speed slider: progress 0..200 -> rate 0.5f to 2.5f (50 = 1.0f)
-        binding.sbSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val rate = calculateRate(progress)
-                val descriptor = when {
-                    rate < 0.9f -> "(Slow)"
-                    rate in 0.9f..1.1f -> "(Normal)"
-                    else -> "(Fast)"
-                }
-                binding.tvSpeedValue.text = String.format(Locale.US, "Speed: %.2fx %s", rate, descriptor)
-                if (isTtsReady) {
-                    textToSpeech?.setSpeechRate(rate)
-                }
-            }
+                    <!-- Choose voice button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVoice"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Choose voice"
+                        android:textSize="15sp"
+                        app:cornerRadius="12dp" />
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+                    <!-- Quick Sample Text Chips -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-        // Pitch slider: progress 0..150 -> pitch 0.5f to 2.0f (50 = 1.0f)
-        binding.sbPitch.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val pitch = calculatePitch(progress)
-                val descriptor = when {
-                    pitch < 0.9f -> "(Deep)"
-                    pitch in 0.9f..1.1f -> "(Normal)"
-                    else -> "(High)"
-                }
-                binding.tvPitchValue.text = String.format(Locale.US, "Pitch: %.2fx %s", pitch, descriptor)
-                if (isTtsReady) {
-                    textToSpeech?.setPitch(pitch)
-                }
-            }
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSampleBengali"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:minHeight="44dp"
+                            android:paddingHorizontal="8dp"
+                            android:text="@string/btn_sample_bn"
+                            android:textColor="@color/primary_light"
+                            android:textSize="14sp"
+                            app:backgroundTint="@color/primary_container"
+                            app:cornerRadius="12dp" />
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSampleEnglish"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:minHeight="44dp"
+                            android:paddingHorizontal="8dp"
+                            android:text="@string/btn_sample_en"
+                            android:textColor="@color/secondary"
+                            android:textSize="14sp"
+                            app:backgroundTint="@color/secondary_container"
+                            app:cornerRadius="12dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        // Set initial label displays
-        binding.sbSpeed.progress = 50
-        binding.sbPitch.progress = 50
-    }
+            <!-- Card 2: Text Input Field -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp">
 
-    private fun calculateRate(progress: Int): Float {
-        // progress 0 -> 0.5f, 50 -> 1.0f, 200 -> 2.5f
-        return 0.5f + (progress / 100f) * 1.0f
-    }
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-    private fun calculatePitch(progress: Int): Float {
-        // progress 0 -> 0.5f, 50 -> 1.0f, 150 -> 2.0f
-        return 0.5f + (progress / 100f) * 1.0f
-    }
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-    private fun applySpeechRate() {
-        val rate = calculateRate(binding.sbSpeed.progress)
-        textToSpeech?.setSpeechRate(rate)
-    }
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/label_enter_text"
+                            android:textColor="@color/text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
-    private fun applyPitch() {
-        val pitch = calculatePitch(binding.sbPitch.progress)
-        textToSpeech?.setPitch(pitch)
-    }
+                        <!-- Paste Button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPaste"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:paddingHorizontal="8dp"
+                            android:text="@string/btn_paste"
+                            android:textColor="@color/primary"
+                            android:textSize="14sp"
+                            app:icon="@drawable/ic_content_paste"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/primary" />
 
-    /**
-     * Sets up click listeners for all interactive buttons.
-     */
-    private fun setupButtons() {
-        // Speak Primary Button
-        binding.btnSpeak.setOnClickListener {
-            speakCurrentText()
-        }
+                        <!-- Clear Button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnClear"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:paddingHorizontal="8dp"
+                            android:text="@string/btn_clear"
+                            android:textColor="@color/error"
+                            android:textSize="14sp"
+                            app:icon="@drawable/ic_clear"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/error" />
+                    </LinearLayout>
 
-        // Stop Secondary Button
-        binding.btnStop.setOnClickListener {
-            stopSpeech()
-        }
+                    <!-- Text Input Box -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:boxCornerRadiusBottomEnd="14dp"
+                        app:boxCornerRadiusBottomStart="14dp"
+                        app:boxCornerRadiusTopEnd="14dp"
+                        app:boxCornerRadiusTopStart="14dp"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintEnabled="false">
 
-        // Clear Button
-        binding.btnClear.setOnClickListener {
-            binding.etInputText.setText("")
-            stopSpeech()
-        }
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etInputText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:hint="@string/hint_input_text"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:minLines="5"
+                            android:maxLines="10"
+                            android:padding="14dp"
+                            android:scrollbars="vertical"
+                            android:textColor="@color/text_primary"
+                            android:textColorHint="@color/text_tertiary"
+                            android:textSize="15sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        // Paste from Clipboard Button
-        binding.btnPaste.setOnClickListener {
-            pasteFromClipboard()
-        }
+                    <!-- Character & Word Counter -->
+                    <TextView
+                        android:id="@+id/tvCharCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="6dp"
+                        android:text="0 characters • 0 words"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        // Quick Test: Bengali Sample Button
-        binding.btnSampleBengali.setOnClickListener {
-            // Find Bengali (BD) in list
-            val bnIndex = languagesList.indexOfFirst { it.locale.language == "bn" }
-            if (bnIndex != -1) {
-                binding.spinnerLanguage.setSelection(bnIndex)
-            }
-            binding.etInputText.setText(getString(R.string.bengali_sample_text))
-            binding.etInputText.setSelection(binding.etInputText.text?.length ?: 0)
-        }
+            <!-- Card 3: Voice Modulation Controls (Rate & Pitch) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp">
 
-        // Quick Test: English Sample Button
-        binding.btnSampleEnglish.setOnClickListener {
-            // Find English (US) in list
-            val enIndex = languagesList.indexOfFirst { it.locale == Locale.US }
-            if (enIndex != -1) {
-                binding.spinnerLanguage.setSelection(enIndex)
-            }
-            binding.etInputText.setText(getString(R.string.english_sample_text))
-            binding.etInputText.setSelection(binding.etInputText.text?.length ?: 0)
-        }
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        // Reset Sliders Button
-        binding.btnResetControls.setOnClickListener {
-            binding.sbSpeed.progress = 50
-            binding.sbPitch.progress = 50
-            Toast.makeText(this, "Controls reset to 1.0x defaults", Toast.LENGTH_SHORT).show()
-        }
-    }
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-    /**
-     * Executes the Text-to-Speech synthesis using Android's native offline engine.
-     */
-    private fun speakCurrentText() {
-        val textToSpeak = binding.etInputText.text?.toString()?.trim() ?: ""
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_tune"
+                            app:tint="@color/primary" />
 
-        if (textToSpeak.isEmpty()) {
-            Toast.makeText(this, R.string.msg_empty_text, Toast.LENGTH_SHORT).show()
-            binding.etInputText.requestFocus()
-            return
-        }
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:text="Voice Controls"
+                            android:textColor="@color/text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
-        if (!isTtsReady || textToSpeech == null) {
-            Toast.makeText(this, "TTS Engine is initializing, please wait…", Toast.LENGTH_SHORT).show()
-            return
-        }
+                        <!-- Reset Controls Button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnResetControls"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:paddingHorizontal="6dp"
+                            android:text="@string/btn_reset_controls"
+                            android:textColor="@color/primary"
+                            android:textSize="14sp"
+                            app:icon="@drawable/ic_refresh"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/primary" />
+                    </LinearLayout>
 
-        // Ensure rate & pitch are up to date
-        applySpeechRate()
-        applyPitch()
+                    <!-- Speed / Speech Rate Slider -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-        // Queue flush mode allows immediate speaking
-        val params = Bundle().apply {
-            putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId)
-        }
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_speed"
+                            app:tint="@color/text_secondary" />
 
-        val result = textToSpeech?.speak(
-            textToSpeak,
-            TextToSpeech.QUEUE_FLUSH,
-            params,
-            utteranceId
-        )
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:text="@string/label_speed"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
 
-        if (result == TextToSpeech.ERROR) {
-            Toast.makeText(this, "Failed to speak text. Check language voice data.", Toast.LENGTH_SHORT).show()
-            updateSpeakingUiState(false)
-        } else {
-            updateSpeakingUiState(true)
-        }
-    }
+                        <TextView
+                            android:id="@+id/tvSpeedValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Speed: 1.00x (Normal)"
+                            android:textColor="@color/primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-    /**
-     * Stops any ongoing speech synthesis immediately.
-     */
-    private fun stopSpeech() {
-        if (textToSpeech != null && textToSpeech?.isSpeaking == true) {
-            textToSpeech?.stop()
-        }
-        isCurrentlySpeaking = false
-        updateSpeakingUiState(false)
-        updateStatus(
-            statusText = getString(R.string.status_ready),
-            isSuccess = true,
-            isWarning = false
-        )
-    }
+                    <SeekBar
+                        android:id="@+id/sbSpeed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:max="200"
+                        android:min="0"
+                        android:progress="50"
+                        android:progressTint="@color/primary"
+                        android:thumbTint="@color/primary" />
 
-    /**
-     * Pastes text from Android system clipboard.
-     */
-    private fun pasteFromClipboard() {
-        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-        if (clipboard != null && clipboard.hasPrimaryClip()) {
-            val clip = clipboard.primaryClip
-            if (clip != null && clip.itemCount > 0) {
-                val text = clip.getItemAt(0).coerceToText(this)
-                if (!text.isNullOrEmpty()) {
-                    binding.etInputText.setText(text)
-                    binding.etInputText.setSelection(text.length)
-                    Toast.makeText(this, R.string.msg_pasted, Toast.LENGTH_SHORT).show()
-                    return
-                }
-            }
-        }
-        Toast.makeText(this, R.string.msg_clipboard_empty, Toast.LENGTH_SHORT).show()
-    }
+                    <!-- Pitch Slider -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-    /**
-     * Monitors character and word counts in the EditText.
-     */
-    private fun setupTextCounters() {
-        binding.etInputText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val content = s?.toString()?.trim() ?: ""
-                val charCount = content.length
-                val wordCount = if (content.isEmpty()) 0 else content.split("\\s+".toRegex()).size
-                binding.tvCharCount.text = getString(R.string.char_count_format, charCount, wordCount)
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
-    }
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_tune"
+                            app:tint="@color/text_secondary" />
 
-    /**
-     * Updates the status badge UI.
-     */
-    private fun updateStatus(statusText: String, isSuccess: Boolean, isWarning: Boolean) {
-        binding.tvStatus.text = statusText
-        when {
-            isSuccess -> {
-                binding.layoutStatusBadge.setBackgroundResource(R.drawable.bg_status_badge)
-                binding.ivStatusDot.setImageResource(R.drawable.ic_check_circle)
-                binding.ivStatusDot.imageTintList = ColorStateList.valueOf(getColor(R.color.on_success_container))
-                binding.tvStatus.setTextColor(getColor(R.color.on_success_container))
-            }
-            isWarning -> {
-                binding.layoutStatusBadge.setBackgroundResource(R.drawable.bg_warning_banner)
-                binding.ivStatusDot.setImageResource(R.drawable.ic_warning)
-                binding.ivStatusDot.imageTintList = ColorStateList.valueOf(getColor(R.color.on_warning_container))
-                binding.tvStatus.setTextColor(getColor(R.color.on_warning_container))
-            }
-            else -> {
-                binding.layoutStatusBadge.setBackgroundResource(R.drawable.bg_spinner_border)
-                binding.ivStatusDot.setImageResource(R.drawable.ic_speed)
-                binding.ivStatusDot.imageTintList = ColorStateList.valueOf(getColor(R.color.text_secondary))
-                binding.tvStatus.setTextColor(getColor(R.color.text_secondary))
-            }
-        }
-    }
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:text="@string/label_pitch"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
 
-    /**
-     * Updates UI components while speech synthesis is active.
-     */
-    private fun updateSpeakingUiState(speaking: Boolean) {
-        binding.progressBarSpeaking.visibility = if (speaking) View.VISIBLE else View.INVISIBLE
-        if (speaking) {
-            binding.btnSpeak.setIconResource(R.drawable.ic_volume_up)
-            binding.btnSpeak.text = "Speaking…"
-            updateStatus(
-                statusText = getString(R.string.status_speaking),
-                isSuccess = true,
-                isWarning = false
-            )
-        } else {
-            binding.btnSpeak.setIconResource(R.drawable.ic_volume_up)
-            binding.btnSpeak.text = getString(R.string.btn_speak)
-        }
-    }
+                        <TextView
+                            android:id="@+id/tvPitchValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pitch: 1.00x (Normal)"
+                            android:textColor="@color/secondary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-    /**
-     * Opens Android Voice Data install intent or falls back to system TTS settings.
-     */
-    private fun openTtsInstallOrSettings() {
-        try {
-            val installIntent = Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
-            startActivity(installIntent)
-        } catch (e: Exception) {
-            openTtsSettings()
-        }
-    }
+                    <SeekBar
+                        android:id="@+id/sbPitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:max="150"
+                        android:min="0"
+                        android:progress="50"
+                        android:progressTint="@color/secondary"
+                        android:thumbTint="@color/secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-    /**
-     * Opens Android System Text-to-Speech Settings.
-     */
-    private fun openTtsSettings() {
-        try {
-            val intent = Intent("com.android.settings.TTS_SETTINGS")
-            startActivity(intent)
-        } catch (e: Exception) {
-            try {
-                val fallbackIntent = Intent(Settings.ACTION_SETTINGS)
-                startActivity(fallbackIntent)
-            } catch (e2: Exception) {
-                Toast.makeText(this, "Unable to open device settings", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    /**
-     * Cleanup TextToSpeech resource on activity destruction.
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-        textToSpeech?.stop()
-        textToSpeech?.shutdown()
-        textToSpeech = null
-    }
-}
+        <!-- Fixed bottom bar: Speak & Stop -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/surface"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <!-- Speak Primary Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSpeak"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/primary"
+                android:text="@string/btn_speak"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_volume_up"
+                app:iconGravity="textStart"
+                app:iconSize="24dp"
+                app:iconTint="@color/white" />
+
+            <!-- Stop Secondary Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStop"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginStart="12dp"
+                android:backgroundTint="@color/error"
+                android:paddingHorizontal="20dp"
+                android:text="@string/btn_stop"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_stop"
+                app:iconGravity="textStart"
+                app:iconSize="20dp"
+                app:iconTint="@color/white" />
+        </LinearLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
