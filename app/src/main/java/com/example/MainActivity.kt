@@ -243,6 +243,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val currentLang = languagesList[selectedLanguageIndex]
 
         val result = tts.setLanguage(currentLang.locale)
+        binding.btnVoice.text = "Choose voice"
 
         when (result) {
             TextToSpeech.LANG_MISSING_DATA -> {
@@ -449,6 +450,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             .setTitle("Choose voice")
             .setItems(names) { _, which ->
                 tts.voice = voices[which]
+                binding.btnVoice.text = "Voice ${which + 1}  •  tap to change"
                 Toast.makeText(this, "Voice ${which + 1} selected", Toast.LENGTH_SHORT).show()
                 speakCurrentText()
             }
@@ -583,6 +585,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
      */
     private fun updateSpeakingUiState(speaking: Boolean) {
         binding.progressBarSpeaking.visibility = if (speaking) View.VISIBLE else View.INVISIBLE
+        binding.soundBars.setAnimating(speaking)
         if (speaking) {
             binding.btnSpeak.setIconResource(R.drawable.ic_volume_up)
             binding.btnSpeak.text = "Speaking…"
