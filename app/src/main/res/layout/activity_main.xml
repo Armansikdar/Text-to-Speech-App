@@ -28,12 +28,13 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/ivAppIcon"
+                <com.example.SoundBarsView
+                    android:id="@+id/soundBars"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
+                    android:background="@drawable/bg_logo_tile"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/tts_app_icon_1794282254631" />
+                    android:padding="11dp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -48,13 +49,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
                         android:textColor="@color/text_primary"
-                        android:textSize="22sp"
+                        android:maxLines="1"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvAppSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/app_subtitle"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
@@ -84,6 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
+                        android:maxLines="1"
                         android:text="@string/status_ready"
                         android:textColor="@color/on_success_container"
                         android:textSize="13sp"
@@ -546,11 +550,12 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/primary"
+                android:background="@drawable/bg_speak_gradient"
                 android:text="@string/btn_speak"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:backgroundTint="@null"
                 app:cornerRadius="16dp"
                 app:icon="@drawable/ic_volume_up"
                 app:iconGravity="textStart"
