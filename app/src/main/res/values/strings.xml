@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Text to Speech</string>
-    <string name="app_subtitle">Offline Native Speech Synthesizer</string>
+    <string name="app_subtitle">Offline voice reader</string>
     
     <!-- Input Section -->
     <string name="hint_input_text">Type or paste text here…</string>
@@ -22,9 +22,9 @@
     <string name="pitch_format">Pitch: %1$.2fx</string>
 
     <!-- Statuses and Messages -->
-    <string name="status_ready">Engine Ready • Offline Mode</string>
-    <string name="status_speaking">Speaking audio…</string>
-    <string name="status_stopped">Playback completed</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_speaking">Speaking…</string>
+    <string name="status_stopped">Done</string>
     <string name="status_initializing">Initializing TextToSpeech engine…</string>
     <string name="status_missing_data">Voice data not found for selected language.</string>
     <string name="status_not_supported">Language is not supported on this device.</string>
