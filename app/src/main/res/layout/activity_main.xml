@@ -111,7 +111,7 @@
                 app:cardBackgroundColor="@color/warning_container"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#FCD34D"
+                app:strokeColor="#6B5518"
                 app:strokeWidth="1dp"
                 tools:visibility="visible">
 
@@ -218,32 +218,36 @@
                             android:spinnerMode="dropdown" />
                     </LinearLayout>
 
+                    <!-- Choose voice button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVoice"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Choose voice"
+                        android:textSize="15sp"
+                        app:cornerRadius="12dp" />
+
                     <!-- Quick Sample Text Chips -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Quick Test:"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSampleBengali"
                             style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:minHeight="40dp"
-                            android:paddingHorizontal="10dp"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:minHeight="44dp"
+                            android:paddingHorizontal="8dp"
                             android:text="@string/btn_sample_bn"
-                            android:textColor="@color/primary"
+                            android:textColor="@color/primary_light"
                             android:textSize="14sp"
                             app:backgroundTint="@color/primary_container"
                             app:cornerRadius="12dp" />
@@ -251,11 +255,13 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSampleEnglish"
                             style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:minHeight="40dp"
-                            android:paddingHorizontal="10dp"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:minHeight="44dp"
+                            android:paddingHorizontal="8dp"
                             android:text="@string/btn_sample_en"
                             android:textColor="@color/secondary"
                             android:textSize="14sp"
