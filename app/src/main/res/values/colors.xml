@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand colors -->
-    <color name="primary">#4338CA</color>
-    <color name="primary_dark">#312E81</color>
-    <color name="primary_light">#6366F1</color>
+    <color name="primary">#7C6DF0</color>
+    <color name="primary_dark">#5B4FD0</color>
+    <color name="primary_light">#A79BFF</color>
     <color name="on_primary">#FFFFFF</color>
-    <color name="primary_container">#EEF2FF</color>
-    <color name="on_primary_container">#312E81</color>
+    <color name="primary_container">#2A2750</color>
+    <color name="on_primary_container">#C9C2FF</color>
 
-    <color name="secondary">#0284C7</color>
-    <color name="secondary_container">#E0F2FE</color>
-    <color name="on_secondary_container">#0369A1</color>
+    <color name="secondary">#5BB6E8</color>
+    <color name="secondary_container">#1B2E3D</color>
+    <color name="on_secondary_container">#8FD3F5</color>
 
-    <color name="accent_teal">#0D9488</color>
-    <color name="accent_teal_container">#CCFBF1</color>
+    <color name="accent_teal">#2DD4BF</color>
+    <color name="accent_teal_container">#12332F</color>
 
-    <!-- Surfaces and Neutrals -->
-    <color name="background">#F8FAFC</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="surface_container">#F1F5F9</color>
-    <color name="surface_container_high">#E2E8F0</color>
-    <color name="surface_container_low">#F8FAFC</color>
+    <color name="background">#14141C</color>
+    <color name="surface">#1E1E2A</color>
+    <color name="surface_container">#262634</color>
+    <color name="surface_container_high">#30303F</color>
+    <color name="surface_container_low">#181821</color>
 
-    <color name="text_primary">#0F172A</color>
-    <color name="text_secondary">#475569</color>
-    <color name="text_tertiary">#94A3B8</color>
+    <color name="text_primary">#F2F1FA</color>
+    <color name="text_secondary">#B4B2C8</color>
+    <color name="text_tertiary">#8A88A0</color>
 
-    <color name="divider_color">#E2E8F0</color>
-    <color name="outline">#CBD5E1</color>
+    <color name="divider_color">#34334A</color>
+    <color name="outline">#46455E</color>
 
-    <!-- Semantic -->
-    <color name="success">#059669</color>
-    <color name="success_container">#D1FAE5</color>
-    <color name="on_success_container">#065F46</color>
+    <color name="success">#34D399</color>
+    <color name="success_container">#173A2C</color>
+    <color name="on_success_container">#7FE0B0</color>
 
-    <color name="warning">#D97706</color>
-    <color name="warning_container">#FEF3C7</color>
-    <color name="on_warning_container">#92400E</color>
+    <color name="warning">#FBBF24</color>
+    <color name="warning_container">#3A2E12</color>
+    <color name="on_warning_container">#F5D78A</color>
 
     <color name="error">#DC2626</color>
-    <color name="error_container">#FEE2E2</color>
-    <color name="on_error_container">#991B1B</color>
+    <color name="error_container">#3A1D22</color>
+    <color name="on_error_container">#FF8C96</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
