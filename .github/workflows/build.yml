@@ -38,8 +38,8 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Build Debug APK
-      run: gradle assembleDebug -x test -x lint -Djava.awt.headless=true
+    - name: Build Release APK
+      run: gradle assembleRelease -x test -x lint -Djava.awt.headless=true
 
     - name: Publish APK to a private release (does not use artifact storage)
       env:
@@ -47,4 +47,4 @@ jobs:
         GH_REPO: ${{ github.repository }}
       run: |
         gh release delete latest-apk --yes --cleanup-tag || true
-        gh release create latest-apk app/build/outputs/apk/debug/*.apk --title "Latest APK" --notes "Newest release build" --prerelease
+        gh release create latest-apk app/build/outputs/apk/release/*.apk --title "Latest APK" --notes "Newest release build" --prerelease
